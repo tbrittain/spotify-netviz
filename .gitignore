@@ -6,6 +6,13 @@ __pycache__/
 # C extensions
 *.so
 
+
+.xlsx
+.csv
+/.idea
+/album_arts
+/album_arts_resized
+
 # Distribution / packaging
 .Python
 build/

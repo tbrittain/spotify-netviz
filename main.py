@@ -1,12 +1,12 @@
 import analysis
 import os
 import glob
-import io
+import io_functions
 
 path = os.getcwd()
 # save original file path
 print('Analyze saved track library or playlists?')
-search_type = io.user_input_parser(['saved', 'playlist'])
+search_type = io_functions.user_input_parser(['saved', 'playlist'])
 global song_analysis_data
 if search_type == 'playlist':
     while True:
@@ -27,7 +27,7 @@ network_edge_data = analysis.generate_network_edges(song_analysis_data)
 # prompt user on whether they would like album arts to be downloaded because this can be
 # a rather large download depending on the number of songs analyzed
 print('Would you like to retrieve album arts?')
-art_response = io.user_input_parser(['yes', 'no'])
+art_response = io_functions.user_input_parser(['yes', 'no'])
 if art_response == 'yes':
     get_art_bool = True
     try:
@@ -41,10 +41,10 @@ network_node_data = analysis.generate_network_nodes(song_analysis_data, network_
 
 # export dataframes
 print("Enter your desired output file format.")
-file_format = io.user_input_parser(['xlsx', 'csv'])
+file_format = io_functions.user_input_parser(['xlsx', 'csv'])
 file_name = input("Enter output file name: ")
 
 os.chdir(path)
-io.playlist_export(song_analysis_data, file_name + '_audio_features', file_format)
-io.playlist_export(network_edge_data, file_name + '_edges', file_format)
-io.playlist_export(network_node_data, file_name + '_nodes', file_format)
+io_functions.playlist_export(song_analysis_data, file_name + '_audio_features', file_format)
+io_functions.playlist_export(network_edge_data, file_name + '_edges', file_format)
+io_functions.playlist_export(network_node_data, file_name + '_nodes', file_format)

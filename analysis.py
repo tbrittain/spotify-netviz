@@ -4,7 +4,7 @@ import os
 import time
 from tqdm import tqdm
 import re
-import io
+import io_functions
 
 
 def saved_lib_results():
@@ -297,7 +297,7 @@ def generate_network_nodes(raw_output, edge_output, get_art=True):
     if get_art:
         # downloads album arts and merges album art paths with the output dataframe for Gephi
         print('Store album arts locally or as hyperlink?')
-        art_response = io.user_input_parser(['local', 'link'])
+        art_response = io_functions.user_input_parser(['local', 'link'])
         if art_response == 'local':
             download_bool = True
         else:
@@ -320,7 +320,7 @@ def album_art_path_append(raw_output, download_bool):
     pd.options.display.width = 0
 
     print('Associate album arts to albums only, or to both albums and songs?')
-    dl_choice = io.user_input_parser(['album', 'both'])
+    dl_choice = io_functions.user_input_parser(['album', 'both'])
     if dl_choice == 'album':
         album_img = raw_output[['album_id', 'art_link']].copy()
         album_img = album_img.rename(columns={'album_id': 'Id'})
@@ -334,7 +334,7 @@ def album_art_path_append(raw_output, download_bool):
         for index, row in artist_img.iterrows():
             if row[0].isalpha and len(row) != 22:  # criteria to isolate artist_id rows from artist rows
                 try:
-                    artist_img_dict = {'Id': row['artist_id'], 'art_link': io.get_artist_art(row)}
+                    artist_img_dict = {'Id': row['artist_id'], 'art_link': io_functions.get_artist_art(row)}
                     artist_img_list.append(artist_img_dict)
                 except IndexError:  # handles in case no artist image available
                     pass
@@ -370,7 +370,7 @@ def album_art_path_append(raw_output, download_bool):
         for index, row in id_img.iterrows():
             path_dict = {}
             try:
-                io.art_download(spotify_id=row['Id'], url=row['art_link'])
+                io_functions.art_download(spotify_id=row['Id'], url=row['art_link'])
             except AttributeError:
                 pass  # occasionally get this error: AttributeError: 'NoneType' object has no attribute 'timeout'
                 # not sure if that means data was not retrieved from the url or not

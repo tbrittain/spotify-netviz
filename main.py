@@ -19,9 +19,8 @@ if search_type == 'playlist':
         except FileNotFoundError:
             print(f'Excel file {imported_file}.xlsx not found. Please try again.')
 elif search_type == 'saved':
-    # song_analysis_data = analysis.saved_lib_results() # need to modify authorization for this to work
-    exit()
-
+    song_analysis_data = analysis.saved_lib_results()
+    song_analysis_data = analysis.get_track_info(method='saved', data=song_analysis_data)
 network_edge_data = analysis.generate_network_edges(song_analysis_data)
 
 # prompt user on whether they would like album arts to be downloaded because this can be

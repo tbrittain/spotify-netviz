@@ -27,9 +27,12 @@ def playlist_track_results(username, playlist_id):
     return tracks
 
 
-def get_track_info(username, playlist_id, method):
+# noinspection PyTypeChecker
+# type checker not a fan of the data='null' optional parameter but it works fine when overwritten by saved tracks
+def get_track_info(method, username='null', playlist_id='null', data='null'):
     """
 
+    :param data:
     :param method: Method of result retrieval, from either playlist (playlist_track_results)
     or saved tracks (saved_lib_results)
     :param username: Spotify username URI for the owner of the given playlist
@@ -50,9 +53,10 @@ def get_track_info(username, playlist_id, method):
     global tracks
     if method == 'playlist':
         tracks = playlist_track_results(username, playlist_id)  # store items of results as tracks
+    # TODO: format saved track data to be same as playlist data for iteration
     elif method == 'saved':
-        tracks = saved_lib_results()
-
+        tracks = data
+        playlist_id = 'Saved'
     # print("Performing metadata retrieval on playlist ID " + str(playlist_id) + " of track length " + str(len(tracks)))
 
     inner = tqdm(desc=f'Playlist {playlist_id}', unit='track', total=len(tracks), leave=False)
@@ -101,6 +105,7 @@ def get_track_info(username, playlist_id, method):
 
     return total_playlist_array
 
+
 def multiple_playlist_track_info(playlist_excel):  # run get_playlist_track_info on various playlists
     """
 
@@ -128,13 +133,12 @@ def multiple_playlist_track_info(playlist_excel):  # run get_playlist_track_info
     overall_playlist_df = pd.DataFrame(columns=feature_list)
 
     # iterate get_playlist_track_info for each playlist in the excel file
-
     # outer = tqdm(desc='Overall progress', unit='playlist',
     #              total=len(reformatted_playlists.items()), leave=True)
     for playlist_id, creator in reformatted_playlists.items():
         # outer.write("Preparing execution on playlist name " + str(playlist_id))
 
-        playlist_df = get_track_info(creator, playlist_id, method='playlist')
+        playlist_df = get_track_info(username=creator, playlist_id=playlist_id, method='playlist')
         overall_playlist_df = pd.concat([overall_playlist_df, playlist_df])
 
         # outer.write("Completed metadata retrieval for playlist " + str(playlist_id))

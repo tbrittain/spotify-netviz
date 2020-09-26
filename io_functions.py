@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 import urllib.request as request
 import auth
+import openpyxl  # required for write to xlsx
 
 
 def user_input_parser(choices):

@@ -2,6 +2,7 @@ import analysis
 import os
 import glob
 import io_functions
+import resize
 
 path = os.getcwd()
 # save original file path
@@ -49,3 +50,13 @@ os.chdir(path)
 io_functions.playlist_export(song_analysis_data, file_name + '_audio_features', file_format)
 io_functions.playlist_export(network_edge_data, file_name + '_edges', file_format)
 io_functions.playlist_export(network_node_data, file_name + '_nodes', file_format)
+
+if get_art_bool:
+    print(
+        '\nWould you like to resize album arts to half width/height? '
+        '\nTheir current average dimensions are around 600x600'
+        '\nResizing would reduce the individual file size substantially.')
+    resize_response = io_functions.user_input_parser(['yes', 'no'])
+    if resize_response == 'yes':
+        resize.resize_arts()
+    print('All operations complete. Thank you!')

@@ -53,7 +53,6 @@ def get_track_info(method, username='null', playlist_id='null', data='null'):
     global tracks
     if method == 'playlist':
         tracks = playlist_track_results(username, playlist_id)  # store items of results as tracks
-    # TODO: format saved track data to be same as playlist data for iteration
     elif method == 'saved':
         tracks = data
         playlist_id = 'Saved'
@@ -106,9 +105,10 @@ def get_track_info(method, username='null', playlist_id='null', data='null'):
     return total_playlist_array
 
 
-def multiple_playlist_track_info(playlist_excel):  # run get_playlist_track_info on various playlists
+def multiple_playlist_track_info(playlist_excel, saved_library=False):
     """
 
+    :param saved_library: Optional - combines playlist data with saved library song data
     :param playlist_excel: Excel file with the following columns verbatim: creator and playlist_id. In the creator
     column, paste the URI of the creator of the playlist, and in the playlist_id column, paste the playlist URI.
     :return: Pandas DataFrame with the following attributes for each song: artist, artist ID, song, song ID,
@@ -135,21 +135,28 @@ def multiple_playlist_track_info(playlist_excel):  # run get_playlist_track_info
     # iterate get_playlist_track_info for each playlist in the excel file
     # outer = tqdm(desc='Overall progress', unit='playlist',
     #              total=len(reformatted_playlists.items()), leave=True)
-    for playlist_id, creator in reformatted_playlists.items():
-        # outer.write("Preparing execution on playlist name " + str(playlist_id))
 
+    for playlist_id, creator in reformatted_playlists.items():
         playlist_df = get_track_info(username=creator, playlist_id=playlist_id, method='playlist')
         overall_playlist_df = pd.concat([overall_playlist_df, playlist_df])
 
-        # outer.write("Completed metadata retrieval for playlist " + str(playlist_id))
+    if saved_library:  # gathers saved song library and combines with playlist info
+        saved_song_analysis_data = saved_lib_results()
+        saved_song_analysis_data = get_track_info(method='saved', data=saved_song_analysis_data)
+        overall_playlist_df = pd.concat([overall_playlist_df, saved_song_analysis_data])
+
         # outer.update(1)
+
     # isolate unique instances of songs by filtering uri
     overall_playlist_df = overall_playlist_df.drop_duplicates(subset=['song_uri'])
 
-    # TODO: edit time for if longer than 60 seconds
-    print(
-        'Overall playlist retrieval succeeded in ' + str(
-            (round(time.time() - playlist_retrieval_time, 2))) + ' seconds')
+    process_time = round(time.time() - playlist_retrieval_time, 2)
+    if process_time > 60:  # prints minutes and seconds if process time longer than a minute
+        minutes = int(round(process_time / 60, 0))
+        seconds = round(process_time % 60, 0)
+        print(f'Overall playlist retrieval succeeded in {minutes} minutes and {seconds} seconds')
+    else:
+        print(f'Overall playlist retrieval succeeded in {process_time} seconds')
     return overall_playlist_df
 
 
@@ -278,7 +285,6 @@ def generate_network_nodes(raw_output, edge_output, get_art=True):
     # network_nodes = pd.merge(network_nodes, interval_copy, how='inner', on='Target')
     # network_nodes = network_nodes.drop_duplicates(subset=['Target'])
 
-    # TODO: make Spotify URI a hyperlink somehow
     # adding label for identification of spotify IDs
     songs = raw_output[['song_id', 'song', 'song_uri', 'preview_url']].copy()  # added song preview url
     songs = songs.rename(columns={'song_id': 'Id', 'song': 'Label', 'song_uri': 'URL', 'preview_url': 'Preview URL'})
@@ -334,7 +340,7 @@ def album_art_path_append(raw_output, download_bool):
         artist_img = raw_output[['artist', 'artist_id']].copy()  # this path also downloads artist image
         artist_img = artist_img.drop_duplicates(subset=['artist_id'])
         artist_img_list = []
-        # TODO: see if can fix artist image search
+
         for index, row in artist_img.iterrows():
             if row[0].isalpha and len(row) != 22:  # criteria to isolate artist_id rows from artist rows
                 try:
@@ -367,10 +373,11 @@ def album_art_path_append(raw_output, download_bool):
     path_list = []
     if download_bool:
         try:
-            os.mkdir('../album_arts')  # tries to make new album art directory
+            os.mkdir('album_arts')  # tries to make new album art directory
         except FileExistsError:  # fails because already exists
             pass
         outer = tqdm(desc='Art download', unit='images', total=len(id_img), leave=True)
+        os.chdir('album_arts')  # change directory here, not inside for loop. was causing an error
         for index, row in id_img.iterrows():
             path_dict = {}
             try:
@@ -384,10 +391,14 @@ def album_art_path_append(raw_output, download_bool):
             path_list.append(path_dict)
             outer.update(1)
 
-        # TODO: edit time for if longer than 60 seconds
-        print(
-            'Overall art retrieval succeeded in ' + str(
-                (round(time.time() - art_retrieval_time, 2))) + ' seconds')
+        process_time = round(time.time() - art_retrieval_time, 2)
+        if process_time > 60:  # prints minutes and seconds if process time longer than a minute
+            minutes = int(round(process_time / 60, 0))
+            seconds = round(process_time % 60, 0)
+            print(f'Overall playlist retrieval succeeded in {minutes} minutes and {seconds} seconds')
+        else:
+            print(f'Overall playlist retrieval succeeded in {process_time} seconds')
+
         path_df = pd.DataFrame(path_list)
     else:
         id_img = id_img.rename(columns={'art_link': 'image'})  # does not download art

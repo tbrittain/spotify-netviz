@@ -5,22 +5,28 @@ import io_functions
 
 path = os.getcwd()
 # save original file path
+
 print('Analyze saved track library or playlists?')
-search_type = io_functions.user_input_parser(['saved', 'playlist'])
+search_type = io_functions.user_input_parser(['saved', 'playlist', 'both'])
 global song_analysis_data
-if search_type == 'playlist':
+if search_type == 'playlist' or search_type == 'both':
     while True:
         try:
-            # TODO: restrict showing directory contents to xlsx files
             print(f'Contents of current directory: {glob.glob("*.xlsx")}')
             imported_file = input('Enter the name of the Excel file to import (without extension): ')
-            song_analysis_data = analysis.multiple_playlist_track_info(imported_file + ".xlsx")
+            if search_type == 'both':
+                saved_library_search = True
+                song_analysis_data = analysis.multiple_playlist_track_info(imported_file + ".xlsx",
+                                                                           saved_library=saved_library_search)
+            else:
+                song_analysis_data = analysis.multiple_playlist_track_info(imported_file + ".xlsx")
             break
         except FileNotFoundError:
             print(f'Excel file {imported_file}.xlsx not found. Please try again.')
 elif search_type == 'saved':
     song_analysis_data = analysis.saved_lib_results()
     song_analysis_data = analysis.get_track_info(method='saved', data=song_analysis_data)
+
 network_edge_data = analysis.generate_network_edges(song_analysis_data)
 
 # prompt user on whether they would like album arts to be downloaded because this can be
@@ -29,10 +35,6 @@ print('Would you like to retrieve album arts?')
 art_response = io_functions.user_input_parser(['yes', 'no'])
 if art_response == 'yes':
     get_art_bool = True
-    try:
-        os.mkdir('../album_arts')  # tries to make new album art directory
-    except FileExistsError:  # fails because already exists
-        pass
 else:
     get_art_bool = False
 os.chdir(path=path)

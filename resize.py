@@ -6,20 +6,32 @@ from tqdm import tqdm
 from pathlib import Path
 
 path = os.getcwd()
+print(path)
 
 try:
-    os.chdir('../album_arts')
+    os.chdir('album_arts')
+    original_art_path = os.getcwd()
+    print(original_art_path)
 except FileNotFoundError:
     print(f'No album arts folder found in {path}. Please run main.py to download album arts before using this script.')
     exit()
 
 try:  # if ../album_arts/ exists, then create new folder
-    os.mkdir('../album_arts_resized')
-except FileExistsError:
-    pass  # folder exists
+    os.chdir(path=path)
+    os.mkdir('album_arts_resized')
+    os.chdir('album_arts_resized')
+    new_art_path = os.getcwd()
+    print(new_art_path)
 
-outer = tqdm(desc='Art resizing', unit='images', total=len(os.listdir('../album_arts')), leave=True)
-for art in os.listdir('../album_arts'):
+except FileExistsError:
+    os.chdir(path=path)
+    os.chdir('album_arts_resized')
+    new_art_path = os.getcwd()
+    print(new_art_path)
+
+os.chdir(original_art_path)
+outer = tqdm(desc='Art resizing', unit='images', total=len(os.listdir(original_art_path)), leave=True)
+for art in os.listdir(original_art_path):
     try:
         image = Image.open(art)
     except FileNotFoundError:
@@ -28,7 +40,7 @@ for art in os.listdir('../album_arts'):
     # halves the dimensions of the images, so they'll be roughly 300x300 each
     # this is a reduction of approx 80kb/image to 20kb/image
     resized_image = image.resize((round(image.size[0] * .5), round(image.size[1] * .5)))
-    os.chdir('../album_arts_resized')
+    os.chdir(new_art_path)
     resized_art_path = str(os.getcwd() + '/' + art)
     resized_art_path.replace('\\', '/')
     resized_art_path = Path(resized_art_path)
@@ -36,5 +48,5 @@ for art in os.listdir('../album_arts'):
         pass
     else:
         resized_image.save(art)
-    os.chdir('../album_arts')
+    os.chdir(original_art_path)
     outer.update(1)

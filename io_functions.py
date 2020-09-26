@@ -11,7 +11,9 @@ def user_input_parser(choices):
     return choice
 
 
-def get_artist_art(artist_id):
+def original_get_artist_art(artist_id): # depreciated since using spotify.artist using ID is more accurate than
+    # using spotify.search with the name of the artist, especially when there is a more popular artist than the one
+    # you are searching for
     results = auth.spotify.search(q='artist:' + artist_id, type='artist')
     items = results['artists']['items']
     if len(items) > 0:
@@ -20,8 +22,13 @@ def get_artist_art(artist_id):
         return art
 
 
+def get_artist_art(artist_id):
+    results = auth.spotify.artist(artist_id)
+    art = results['images'][0]['url']
+    return art
+
+
 def art_download(spotify_id, url):
-    os.chdir('../album_arts')
     art_path = str(os.getcwd() + '/' + spotify_id + '.jpg')
     art_path.replace('\\', '/')
     art_path = Path(art_path)
@@ -52,4 +59,3 @@ def playlist_export(playlist_dataframe, filename, file_format):
             print('Coule not write to "' + filename + '.' + file_format + '". It may currently be in use. Please close '
                                                                           'any programs currently using it and try '
                                                                           'again.')
-

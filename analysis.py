@@ -154,9 +154,9 @@ def multiple_playlist_track_info(playlist_excel, saved_library=False):
     if process_time > 60:  # prints minutes and seconds if process time longer than a minute
         minutes = int(round(process_time / 60, 0))
         seconds = round(process_time % 60, 0)
-        print(f'Overall playlist retrieval succeeded in {minutes} minutes and {seconds} seconds')
+        print(f'\nOverall playlist retrieval succeeded in {minutes} minutes and {seconds} seconds')
     else:
-        print(f'Overall playlist retrieval succeeded in {process_time} seconds')
+        print(f'\nOverall playlist retrieval succeeded in {process_time} seconds')
     return overall_playlist_df
 
 
@@ -344,7 +344,7 @@ def album_art_path_append(raw_output, download_bool):
         for index, row in artist_img.iterrows():
             if row[0].isalpha and len(row) != 22:  # criteria to isolate artist_id rows from artist rows
                 try:
-                    artist_img_dict = {'Id': row['artist_id'], 'art_link': io_functions.get_artist_art(row)}
+                    artist_img_dict = {'Id': row['artist_id'], 'art_link': io_functions.get_artist_art(row['artist_id'])}
                     artist_img_list.append(artist_img_dict)
                 except IndexError:  # handles in case no artist image available
                     pass
@@ -395,9 +395,9 @@ def album_art_path_append(raw_output, download_bool):
         if process_time > 60:  # prints minutes and seconds if process time longer than a minute
             minutes = int(round(process_time / 60, 0))
             seconds = round(process_time % 60, 0)
-            print(f'Overall playlist retrieval succeeded in {minutes} minutes and {seconds} seconds')
+            print(f'\nOverall art retrieval succeeded in {minutes} minutes and {seconds} seconds')
         else:
-            print(f'Overall playlist retrieval succeeded in {process_time} seconds')
+            print(f'\nOverall art retrieval succeeded in {process_time} seconds')
 
         path_df = pd.DataFrame(path_list)
     else:

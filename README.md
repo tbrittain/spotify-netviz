@@ -1,8 +1,11 @@
 # spotify-netviz
 
 This project will prepare Spotify library data for use in network visualizations. In other words, this project was created to investigate the connectivity of a network from a user's Spotify library. 
+
 This project is not used to visualize the network; rather, it simply prepares Spotify library network data for use in a program such as [Gephi]. 
+
 Additionally, it will output Spotify [Audio Features] data for your own statistical analysis, if you are so inclined.
+
 If you would like to see a live demo of what this project is capable of, you can check out [my library]. Note: I used Gephi for visualizing the network itself and [Gexf-js] for the webpage.
 
 ## Installation
@@ -32,11 +35,12 @@ This program supports as many playlists as you would like to include. Be sure to
 
 ### Authorization and Song Retrieval
 
-Upon running the program and selecting whether you are working with Saved Tracks/playlists/both, your browser will open for Spotify authorization. Simply sign in through spotify and agree to the terms. That'll look something like this once you have signed in:
+Upon running the program and selecting whether you are working with Saved Tracks/playlists/both, your browser will open for Spotify authorization. Simply sign in to Spotify and agree to the terms. That'll look something like this once you have signed in:
 
 ![alt text][authorize]
 
 Upon accepting, the program will download song information from the specified track location(s). *Depending on the number of tracks to analyze, this step could take quite some time as the program typically averages around 20 tracks parsed per second.*
+
 During this step, the program is performing 3 operations:
 1. Compiling an array of general track information and Spotify Audio Features for each track
 2. Taking the general track information to create an array of edges with direction from song &rarr; album, album &rarr; artist, and artist &rarr; genre

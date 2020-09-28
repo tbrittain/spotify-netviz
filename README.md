@@ -24,7 +24,7 @@ If you are working with playlists, you must first obtain the ID of both the play
 
 Once you have located both of these URIs, create a .xlsx spreadsheet with the following format:
 
-| creator     |       playlist_uri        |
+| creator     |       playlist_id         |
 | :---        |           ---:            |
 | spotify     |   37i9dQZF1DX6ujZpAN0v9r  |
 | spotify     |   37i9dQZF1DX6ALfRKlHn1t  |
@@ -78,6 +78,7 @@ TBA
 Eventually I would like to add some more functionality to further releases including:
 * More output formats for additional network visualization software if they do not support the current Edge and Node format (as this has only been tested with Gephi)
 * Finishing Time Interval data for dynamic graphs (for observing music taste over time)
+* Adjusting the algorithm for associating songs with artists. Currently does so through song &rarr; album &rarr; artist, but this does not take into account songs with 2+ artists
 
 ## License
 [MIT]

@@ -43,11 +43,15 @@ During this step, the program is performing 3 operations:
 3. Creating an array of nodes (along with various attributes such as previews for songs, links to genres on [EveryNoise], Spotify URI for songs/albums/artists ,and optional album art images)
 
 ### Album Arts
-
+*Images for this section TBA*
 Afterwards, you will be prompted on whether to obtain album art data. 
 If you select yes, album arts can either be saved locally or as the hyperlink itself. The local option will save the album art images to disk in an album_arts folder.
+
 The next prompt is whether album arts should be associated with solely the album nodes or both albums and the album's songs. This choice determines which nodes receive an "image" attribute so that the art will can be viewed directly on the network graph. Based on whether you selected local download of arts or hyperlink, the image attribute will be either a relative file location (e.g. album_arts/image.jpg) or the hyperlink.
+
 If you choose the "both" association option, it will additionally retrieve images for artists as well. The album only option does not currently have this feature.
+
+*If you are saving the arts locally, this download will take slightly over double the amount of time that the song retrieval took, as the program typically averages around 8 arts downloaded per second.*
 
 ### Export
 

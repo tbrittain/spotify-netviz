@@ -11,7 +11,11 @@ from banner import banner
 print("\n")
 banner()
 time.sleep(2)
-print("Crated by Trey Brittain\ntbrittain.com\nPlease see the readme for documentation\n")
+print("Please see the readme for documentation"
+      "\nCopyright (c) 2020 Trey Brittain"
+      "\ntbrittain.com"
+      "\nRelease v0.1"
+      "\n")
 
 path = os.getcwd()
 # save original file path
@@ -64,7 +68,7 @@ io_functions.playlist_export(network_node_data, file_name + '_nodes', file_forma
 if get_art_bool:
     print(
         '\nWould you like to resize album arts to half width/height? '
-        '\nTheir current average dimensions are around 600x600'
+        '\nTheir current average dimensions are around 600x600 pixels'
         '\nResizing would reduce the individual file size substantially.')
     resize_response = io_functions.user_input_parser(['yes', 'no'])
     if resize_response == 'yes':

@@ -1,5 +1,6 @@
 # use to resize album arts because the raw files are in excess of 600x600 pixels which could add up
 # adapted from https://pythontic.com/image-processing/pillow/resize
+import time
 import PIL.Image as Image
 import os
 from tqdm import tqdm
@@ -38,7 +39,8 @@ def resize_arts():
         try:
             image = Image.open(art)
         except FileNotFoundError:
-            print('No album arts found in folder.')
+            print('No album arts found in folder.\nProgram operations complete.')
+            time.sleep(3)
             exit()
         # halves the dimensions of the images, so they'll be roughly 300x300 each
         # this is a reduction of approx 80kb/image to 20kb/image

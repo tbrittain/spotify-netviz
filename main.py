@@ -38,6 +38,8 @@ if search_type == 'playlist' or search_type == 'both':
             break
         except FileNotFoundError:
             print(f'Excel file {imported_file}.xlsx not found. Please try again.')
+        except EOFError:
+            exit()
 elif search_type == 'saved':
     song_analysis_data = analysis.saved_lib_results()
     song_analysis_data = analysis.get_track_info(method='saved', data=song_analysis_data)

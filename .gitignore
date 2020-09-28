@@ -134,3 +134,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+how_to_install.txt
+all_playlists.xlsx
+example.xlsx
+total_audio_features.csv
+total_edges.csv
+total_nodes.csv

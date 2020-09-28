@@ -7,8 +7,11 @@ import openpyxl  # required for write to xlsx
 
 def user_input_parser(choices):
     choice = ''
-    while choice not in choices:
-        choice = input('Please use one of the following options: %s: ' % ', '.join(choices))
+    try:
+        while choice not in choices:
+            choice = input('Please use one of the following options: %s: ' % ', '.join(choices))
+    except EOFError:
+        exit()
     return choice
 
 

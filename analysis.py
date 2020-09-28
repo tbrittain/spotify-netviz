@@ -306,7 +306,7 @@ def generate_network_nodes(raw_output, edge_output, get_art=True):
 
     if get_art:
         # downloads album arts and merges album art paths with the output dataframe for Gephi
-        print('Store album arts locally or as hyperlink?')
+        print('\nStore album arts locally or as hyperlink?')
         art_response = io_functions.user_input_parser(['local', 'link'])
         if art_response == 'local':
             download_bool = True
@@ -329,7 +329,7 @@ def album_art_path_append(raw_output, download_bool):
     """
     pd.options.display.width = 0
 
-    print('Associate album arts to albums only, or to both albums and songs?')
+    print('\nAssociate album arts to albums only, or to both albums and songs?')
     dl_choice = io_functions.user_input_parser(['album', 'both'])
     if dl_choice == 'album':
         album_img = raw_output[['album_id', 'art_link']].copy()

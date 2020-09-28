@@ -3,11 +3,20 @@ import os
 import glob
 import io_functions
 import resize
+import pyfiglet
+import time
+
+ascii_banner = pyfiglet.figlet_format("Spotify Netviz", font="kban")
+print("\n")
+print(ascii_banner)
+time.sleep(2)
+print("Crated by Trey Brittain\ntbrittain.com\nPlease see the readme for documentation\n")
 
 path = os.getcwd()
 # save original file path
 
-print('Analyze saved track library or playlists?')
+print('Analyze saved track library (Liked Songs) or playlists?'
+      '\nIf analyzing playlists, please refer to readme for setup')
 search_type = io_functions.user_input_parser(['saved', 'playlist', 'both'])
 global song_analysis_data
 if search_type == 'playlist' or search_type == 'both':
@@ -32,7 +41,7 @@ network_edge_data = analysis.generate_network_edges(song_analysis_data)
 
 # prompt user on whether they would like album arts to be downloaded because this can be
 # a rather large download depending on the number of songs analyzed
-print('Would you like to retrieve album arts?')
+print('\nWould you like to retrieve album arts?')
 art_response = io_functions.user_input_parser(['yes', 'no'])
 if art_response == 'yes':
     get_art_bool = True
@@ -42,7 +51,7 @@ os.chdir(path=path)
 network_node_data = analysis.generate_network_nodes(song_analysis_data, network_edge_data, get_art=get_art_bool)
 
 # export dataframes
-print("Enter your desired output file format.")
+print("\nEnter your desired output file format.")
 file_format = io_functions.user_input_parser(['xlsx', 'csv'])
 file_name = input("Enter output file name: ")
 
@@ -59,4 +68,6 @@ if get_art_bool:
     resize_response = io_functions.user_input_parser(['yes', 'no'])
     if resize_response == 'yes':
         resize.resize_arts()
-    print('All operations complete. Thank you!')
+print('\nAll operations complete.')
+time.sleep(3)
+exit()

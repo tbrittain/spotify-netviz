@@ -70,4 +70,3 @@ if get_art_bool:
         resize.resize_arts()
 print('\nAll operations complete.')
 time.sleep(3)
-exit()

@@ -3,12 +3,13 @@ import os
 import glob
 import io_functions
 import resize
-import pyfiglet
+# import pyfiglet
 import time
+from banner import banner
 
-ascii_banner = pyfiglet.figlet_format("Spotify Netviz", font="kban")
+# ascii_banner = pyfiglet.figlet_format("Spotify Netviz", font="kban")
 print("\n")
-print(ascii_banner)
+banner()
 time.sleep(2)
 print("Crated by Trey Brittain\ntbrittain.com\nPlease see the readme for documentation\n")
 
